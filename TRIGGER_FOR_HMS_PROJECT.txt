@@ -1,0 +1,17 @@
+DELIMITER $$
+
+DROP TRIGGER /*!50032 IF EXISTS */ `Room_Charges_Check`$$
+
+CREATE
+    /*!50017 DEFINER = 'root'@'localhost' */
+    TRIGGER `Room_Charges_Check` BEFORE INSERT ON `room` 
+    FOR EACH ROW BEGIN
+           IF NEW.ROOMCHARGES < 0 THEN
+               SET NEW.ROOMCHARGES = 0;
+           ELSEIF NEW.ROOMCHARGES > 0 THEN
+               SET NEW.ROOMCHARGES = NEW.ROOMCHARGES + (NEW.ROOMCHARGES*0.18);
+           END IF;
+       END;
+$$
+
+DELIMITER ;
